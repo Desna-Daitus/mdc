@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Personal Website</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --accent:#2b6cb0;
+      --muted:#6b7280;
+      --nav:#1f2937;
+      --nav-hover:#374151;
+      --shadow: 0 6px 18px rgba(15,23,42,0.08);
+      --radius:12px;
+      --max-width:1100px;
+      --gap:16px;
+      font-synthesis: none;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    /* Header */
+    header{
+      background: linear-gradient(90deg,var(--nav), #0f1724);
+      color:white;
+      padding:18px 12px;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.12);
+      position:sticky;
+      top:0;
+      z-index:30;
+    }
+    .header-inner{
+      max-width:var(--max-width);
+      margin:0 auto;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    header h1{
+      font-size:18px;
+      margin:0;
+      letter-spacing:0.2px;
+    }
+    #menu-toggle{
+      display:none;
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.08);
+      color:white;
+      padding:8px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    /* Navigation */
+    nav{
+      background:var(--nav);
+      color:white;
+      border-top: 1px solid rgba(255,255,255,0.02);
+    }
+    .nav-inner{
+      max-width:var(--max-width);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:6px 12px;
+    }
+    .menu {
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    .menu a{
+      display:inline-block;
+      padding:10px 14px;
+      color: #fff;
+      text-decoration:none;
+      border-radius:8px;
+      font-size:15px;
+      transition:background .18s, transform .08s;
+    }
+    .menu a:hover{ background:var(--nav-hover); transform:translateY(-1px); }
+    .menu a.active{ background: rgba(255,255,255,0.08); outline: 2px solid rgba(255,255,255,0.03); }
+
+    /* Main content container */
+    main{
+      max-width:var(--max-width);
+      margin:22px auto;
+      padding:0 12px 60px;
+    }
+    .card{
+      background:var(--card);
+      padding:22px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      min-height:320px;
+    }
+    h2{ margin-top:0; color:var(--nav); }
+
+    /* small UI pieces */
+    .muted{ color:var(--muted); }
+    ul.clean{ padding-left:18px; margin:8px 0; }
+    .grid{
+      display:grid;
+      gap:12px;
+    }
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], textarea{
+      padding:10px 12px;
+      border:1px solid #e6e9ee;
+      border-radius:8px;
+      font-size:14px;
+      width:100%;
+      background:white;
+    }
+    textarea{ min-height:110px; resize:vertical; }
+
+    button.primary{
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .note{ font-size:13px; color:var(--muted); margin-top:8px; }
+
+    /* Footer */
+    footer{
+      max-width:var(--max-width);
+      margin:18px auto 32px;
+      padding:12px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width:840px){
+      header h1{ font-size:16px }
+      #menu-toggle{ display:inline-flex; }
+      .menu{ display:none; position:absolute; left:12px; right:12px; top:76px; flex-direction:column; background:var(--nav); padding:12px; border-radius:12px; box-shadow:var(--shadow); }
+      .menu.show{ display:flex; }
+      .nav-inner{ padding-bottom:12px; }
+    }
+
+    @media (max-width:520px){
+      .card{ padding:16px; }
+      .header-inner{ padding:0 6px }
+      .nav-inner{ padding:0 6px }
+      main{ padding:0 8px 50px }
+    }
+
+    /* small visual success message */
+    .toast{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:10px;
+      background: #ecfdf5;
+      color:#065f46;
+      border:1px solid #bbf7d0;
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header (master) -->
+  <header>
+    <div class="header-inner">
+      <h1>My Personal Website</h1>
+      <button id="menu-toggle" aria-controls="main-nav" aria-expanded="false" title="Toggle menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Navigation (master) -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="menu" id="main-nav" role="navigation">
+        <a href="#home" data-page="home" class="nav-link">Home</a>
+        <a href="#hobby" data-page="hobby" class="nav-link">My Hobby</a>
+        <a href="#qualifications" data-page="qualifications" class="nav-link">Qualifications</a>
+        <a href="#activities" data-page="activities" class="nav-link">Extra Curricular</a>
+        <a href="#parents" data-page="parents" class="nav-link">Parent Details</a>
+        <a href="#contact" data-page="contact" class="nav-link">Contact</a>
+      </div>
+      <!-- optional right area (version, quick) -->
+      <div class="muted" style="font-size:13px">Master layout • Single file</div>
+    </div>
+  </nav>
+
+  <!-- Content area (master) -->
+  <main>
+    <section class="card" id="content-area" role="main" aria-live="polite">
+      <!-- dynamic content will be injected here -->
+    </section>
+  </main>
+
+  <!-- Footer (master) -->
+  <footer>
+    &copy; <span id="year"></span> My Personal Website — Built with HTML, CSS & JavaScript
+  </footer>
+
+  <!-- Templates for each "page" (these act like content pages) -->
+  <template id="tpl-home">
+    <h2>Home</h2>
+    <p>Hello! I’m <strong>Desna Daitus</strong>. Welcome to my personal website.</p>
+    <p class="muted">I am a student who enjoys learning new things and 
+    exploring different areas of interest. I like reading, listening to music, and spending 
+    time with friends and family.</p>
+    <img src="pro.jpg">
+    <hr />
+    <div class="row">
+      <div style="flex:1; min-width:240px;">
+        <h3>Quick facts</h3>
+        <ul class="clean">
+          <li>Location : Angamaly</li>
+          <li>Profession : Student</li>
+          <li>Interests : Reading,Talking,spending time with family and friends</li>
+        </ul>
+      </div>
+      <div style="flex:1; min-width:240px;">
+        <h3>Short Bio</h3>
+        <p class="muted">I like building things, learning new tech and participating in community events.</p>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-hobby">
+    <h2>My Hobby</h2>
+    <p>I enjoy spending free time on reading and watching reels</p>
+    <ul class="clean">
+      <li><strong>Theatre & Acting : </strong>Performing, stage shows.</li>
+      <li><strong>Travel Journaling Documenting : </strong> trips with photos and stories.</li>
+      <li><strong>Reading : </strong> Fiction,mystery,crime.</li>
+    </ul>
+  </template>
+
+  <template id="tpl-qualifications">
+    <h2>Qualifications</h2>
+    <ul class="clean">
+      <li><strong>High School : </strong>SACRED HEART ENGLISH MEDIUM SCHOOL,MOOKKANNUR,2025</li>
+      <li><strong>Bachelor's : </strong>BBA-SHRM(CP),RAJAGIRI COLLEGE OF SOCIAL SCIENCES,KALAMASSERY,2029</li>
+      <li><strong>Certifications : </strong>Anchoring,Acting,Sports.</li>
+    </ul>
+  </template>
+
+  <template id="tpl-activities">
+    <h2>Extra Curricular Activities</h2>
+    <p>I have participated in:</p>
+    <ul class="clean">
+      <li>Sports events</li>
+      <li>Cultural programs —Drama</li>
+    </ul>
+  </template>
+
+  <template id="tpl-parents">
+    <h2>Parent Details</h2>
+    <div class="grid">
+      <div>
+        <h3>Father</h3>
+        <p><strong>Name:</strong> Mr.Daitus Joseph</p>
+        <p><strong>Occupation:</strong>Businessman</p>
+        <p class="muted"><strong>Contact:</strong>+91xxxxxx</p>
+      </div>
+      <div>
+        <h3>Mother</h3>
+        <p><strong>Name:</strong> Mrs.Bindu Daitus</p>
+        <p><strong>Occupation:</strong>House wife</p>
+        <p class="muted"><strong>Contact:</strong>+91xxxxxx</p>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-contact">
+    <h2>Contact</h2>
+    <p>If you'd like to get in touch, fill this form and click <em>Send</em> — this demo validates the form but does not send emails (no server required).</p>
+
+    <form id="contact-form" novalidate>
+      <div class="field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" type="text" placeholder="Full name" required>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone (optional)</label>
+        <input id="phone" name="phone" type="tel" placeholder="+91-XXXXXXXXXX">
+      </div>
+
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
+      </div>
+
+      <button class="primary" type="submit">Send</button>
+      <div id="contact-result" aria-live="polite"></div>
+    </form>
+  </template>
+
+  <script>
+    (function(){
+      const PAGES = ['home','hobby','qualifications','activities','parents','contact'];
+      const contentArea = document.getElementById('content-area');
+      const yearSpan = document.getElementById('year');
+      yearSpan.textContent = new Date().getFullYear();
+
+      // menu toggle for small screens
+      const menuToggle = document.getElementById('menu-toggle');
+      const mainNav = document.getElementById('main-nav');
+      menuToggle.addEventListener('click', () => {
+        const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', String(!expanded));
+        mainNav.classList.toggle('show');
+      });
+
+      // Populate nav links event
+      const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+      navLinks.forEach(a => {
+        // support click -> change hash (so history works)
+        a.addEventListener('click', (e) => {
+          // let link behave by changing hash - no need to preventDefault
+          // but close mobile menu
+          mainNav.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // load page based on hash or default
+      function getPageFromHash(){
+        const h = (location.hash || '').replace('#','').trim().toLowerCase();
+        return PAGES.includes(h) ? h : 'home';
+      }
+
+      function setActiveNav(page){
+        navLinks.forEach(a => {
+          if (a.dataset.page === page) a.classList.add('active');
+          else a.classList.remove('active');
+        });
+      }
+
+      // inject template content
+      function loadPage(page){
+        const tpl = document.getElementById('tpl-' + page);
+        if (!tpl){
+          contentArea.innerHTML = '<h2>Not found</h2><p>Page template missing.</p>';
+          return;
+        }
+        // clone template content
+        contentArea.innerHTML = '';
+        const clone = tpl.content.cloneNode(true);
+        contentArea.appendChild(clone);
+
+        setActiveNav(page);
+        // after injecting, wire page-specific behaviours
+        if (page === 'contact'){
+          wireContactForm();
+        }
+      }
+
+      // Contact form logic: validate and show a fake success message
+      function wireContactForm(){
+        const form = document.getElementById('contact-form');
+        if (!form) return;
+        const result = document.getElementById('contact-result');
+
+        form.addEventListener('submit', function(ev){
+          ev.preventDefault();
+          result.textContent = '';
+          result.className = '';
+          const name = form.name.value.trim();
+          const email = form.email.value.trim();
+          const message = form.message.value.trim();
+
+          // simple validation
+          if (!name){
+            result.textContent = 'Please enter your name.';
+            result.className = 'note';
+            form.name.focus();
+            return;
+          }
+          if (!validateEmail(email)){
+            result.textContent = 'Please enter a valid email address.';
+            result.className = 'note';
+            form.email.focus();
+            return;
+          }
+          if (!message){
+            result.textContent = 'Please enter a message.';
+            result.className = 'note';
+            form.message.focus();
+            return;
+          }
+
+          // simulate successful send
+          result.innerHTML = '<span class="toast">Thanks, ' + escapeHtml(name) + '! Your message is received (demo only).</span>';
+          form.reset();
+        });
+      }
+
+      function validateEmail(email){
+        // basic email test
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      // simple escape for demo output
+      function escapeHtml(s){
+        return s.replace(/[&<>"']/g, function(c){
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+      }
+
+      // load on hash change
+      window.addEventListener('hashchange', () => {
+        loadPage(getPageFromHash());
+        // scroll to top of content area
+        window.scrollTo({top: document.querySelector('main').offsetTop - 8, behavior:'smooth'});
+      });
+
+      // initial load
+      loadPage(getPageFromHash());
+
+      // Accessibility: allow pressing Escape to close mobile menu
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape'){
+          mainNav.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
